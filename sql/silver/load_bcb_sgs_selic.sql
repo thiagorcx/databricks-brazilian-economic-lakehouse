@@ -9,6 +9,7 @@ USING (
         source_series_code,
         ingestion_timestamp AS source_ingestion_timestamp,
         execution_id AS source_execution_id,
+        record_hash AS source_record_hash,
         CURRENT_TIMESTAMP() AS processed_timestamp
     FROM workspace.brazilian_economic_bronze.bcb_sgs_selic
     WHERE
@@ -23,16 +24,18 @@ USING (
     ) = 1
 
 ) AS source
-
 ON
     target.source_series_code = source.source_series_code
     AND target.reference_date = source.reference_date
 
-WHEN MATCHED THEN UPDATE SET
+WHEN MATCHED
+AND NOT (target.record_hash <=> source.source_record_hash)
+THEN UPDATE SET
     target.selic_target_rate = source.selic_target_rate,
     target.source_system = source.source_system,
     target.source_ingestion_timestamp = source.source_ingestion_timestamp,
     target.source_execution_id = source.source_execution_id,
+    target.record_hash = source.source_record_hash,
     target.processed_timestamp = source.processed_timestamp
 
 WHEN NOT MATCHED THEN INSERT (
@@ -42,6 +45,7 @@ WHEN NOT MATCHED THEN INSERT (
     source_series_code,
     source_ingestion_timestamp,
     source_execution_id,
+    record_hash,
     processed_timestamp
 )
 VALUES (
@@ -51,5 +55,6 @@ VALUES (
     source.source_series_code,
     source.source_ingestion_timestamp,
     source.source_execution_id,
+    source.source_record_hash,
     source.processed_timestamp
 );

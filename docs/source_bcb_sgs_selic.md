@@ -85,3 +85,39 @@ The Silver layer will:
 - remove or handle duplicates
 - apply data quality rules
 - maintain validated records for analytical consumption
+
+## Implemented Data Flow
+
+The BCB SGS Selic series is currently implemented through the following pipeline:
+
+1. API ingestion using Python and the public BCB SGS endpoint.
+2. Raw data persistence in the Bronze Delta table.
+3. Bronze data quality checks recorded in the governance layer.
+4. Type conversion and deduplication into the Silver layer using SQL MERGE.
+5. Silver data quality checks.
+6. Analytical transformation into the Gold layer.
+7. Gold calculations include previous rate, rate change in percentage points and movement classification.
+
+### Implemented Tables
+
+- `workspace.brazilian_economic_bronze.bcb_sgs_selic`
+- `workspace.brazilian_economic_silver.bcb_sgs_selic`
+- `workspace.brazilian_economic_gold.selic_daily`
+- `workspace.brazilian_economic_governance.data_quality_results`
+
+### Current Status
+
+The Selic pipeline has been validated for:
+
+- API connectivity
+- HTTP error validation
+- dynamic lookback window
+- Bronze ingestion
+- technical ingestion metadata
+- Silver type conversion
+- deduplication
+- idempotent MERGE processing
+- Bronze data quality checks
+- Silver data quality checks
+- Gold analytical transformation
+- Gold idempotency

@@ -24,6 +24,9 @@ CREATE TABLE IF NOT EXISTS workspace.brazilian_economic_gold.selic_daily
     year_month STRING
         COMMENT 'Reference year and month in YYYY-MM format',
 
+    record_hash STRING
+    COMMENT 'SHA-256 hash of Gold business attributes used for change detection',
+
     processed_timestamp TIMESTAMP
         COMMENT 'Timestamp when the Gold record was processed'
 )

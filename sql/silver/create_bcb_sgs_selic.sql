@@ -18,6 +18,9 @@ CREATE TABLE IF NOT EXISTS workspace.brazilian_economic_silver.bcb_sgs_selic
     source_execution_id STRING
         COMMENT 'Execution identifier of the selected Bronze record',
 
+    record_hash STRING
+    COMMENT 'SHA-256 hash of the source record used for change detection',
+
     processed_timestamp TIMESTAMP
         COMMENT 'Timestamp when the Silver transformation was executed'
 )

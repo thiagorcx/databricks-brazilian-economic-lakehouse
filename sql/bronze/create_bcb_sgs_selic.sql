@@ -19,7 +19,10 @@ CREATE TABLE IF NOT EXISTS workspace.brazilian_economic_bronze.bcb_sgs_selic
         COMMENT 'Date when the ingestion was executed',
 
     execution_id STRING
-        COMMENT 'Unique identifier of the pipeline execution'
+        COMMENT 'Unique identifier of the pipeline execution',
+
+    record_hash STRING
+    COMMENT 'SHA-256 hash used to identify identical source records'
 )
 USING DELTA
 COMMENT 'Bronze table containing raw Selic target rate data from BCB SGS series 432';
